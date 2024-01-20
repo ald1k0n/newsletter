@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { ReactNode, createContext, useState, useEffect } from 'react';
 import { IUser, ROLES } from './types/user';
 
 const initialContext = {
 	id: Date.now(),
+	//@ts-ignore
 	role: ROLES.CLIENT,
 };
 export const AuthContext = createContext<{

@@ -4,4 +4,5 @@ export type INews = {
 	description: string;
 	urlToImage: string;
 	content?: string;
+	url?: string;
 };

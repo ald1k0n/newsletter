@@ -33,25 +33,22 @@ const db = getFirestore(app);
 
 const commentsRef = collection(db, 'comments');
 
-export async function getAllCommentsByID(id: number) {
-	const q = query(commentsRef, where('news_id', '==', id));
+export async function getAllCommentsByID(url: string) {
+	const q = query(commentsRef, where('url', '==', url));
 	const commentsSnapshot = (await getDocs(q).catch(console.error)) as any;
 
 	const comments: any = [];
-	commentsSnapshot.forEach((d: any) => comments.push({ ...d, id: d.id }));
+	commentsSnapshot.forEach((d: any) =>
+		comments.push({ comment: d.data(), id: d.id })
+	);
 
 	return comments;
 }
 
-export async function addComment(
-	news_id: number,
-	username: string,
-	text: string
-) {
+export async function addComment(url: string, text: string) {
 	const newComment = doc(commentsRef);
 	const data = {
-		news_id,
-		username,
+		url,
 		text,
 		created_at: Date.now(),
 	};

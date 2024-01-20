@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { AuthContext } from '@/contexts';
 import { useContext } from 'react';
 import { Button } from './Button';
