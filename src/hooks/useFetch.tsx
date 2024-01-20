@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 
-export function useFetch(url: string) {
+export function useFetch<T>(url: string): {
+	data: T | null;
+	isLoading: boolean;
+	isError: boolean;
+	error: any | null;
+	refetch: () => void;
+} {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [error, setError] = useState(null);
@@ -21,7 +27,7 @@ export function useFetch(url: string) {
 	};
 
 	useEffect(() => {
-		(async () => refetch())();
+		(async () => await refetch())();
 		return () => {
 			setIsLoading(false);
 			setIsError(false);

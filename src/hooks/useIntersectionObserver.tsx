@@ -1,6 +1,6 @@
 import { DependencyList, useCallback, useRef } from 'react';
 
-export default function useIntersetcionObserver<T extends HTMLElement>(
+export function useIntersetcionObserver<T extends HTMLElement>(
 	callback: () => void,
 	deps: DependencyList
 ) {

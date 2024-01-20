@@ -1,25 +1,41 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { NEWS_API_URL, API_KEY } from '@/config';
+import { NEWS_API_URL } from '@/config';
+import { INews } from '@/types';
+import { Card, Header, Pagination } from '@/components';
 import { useFetch } from '@/hooks';
 
 export default function Home() {
-	const navigate = useNavigate();
-	const [search, setSearch] = useState('Казахстан');
-	const [limit, setLimit] = useState(5);
-	const [apiUrl] = useState(
-		`${NEWS_API_URL}everything?apiKey=${API_KEY}&q=${search}&pageSize=${limit}`
+	const [page, setPage] = useState(1);
+	const { data, isLoading } = useFetch<{
+		articles: INews[];
+		totalResults: number;
+	}>(`${NEWS_API_URL}&pageSize=${8}&page=${page}&q=${'Steam'}`);
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
+
+	return (
+		<>
+			<Header />
+			<main className='w-full flex justify-center flex-col'>
+				<div className='w-full justify-center gap-4 flex flex-wrap'>
+					{data?.articles.map((a) => (
+						<Card
+							key={a.title}
+							description={a.description}
+							title={a.title}
+							urlToImage={a.urlToImage}
+						/>
+					))}
+				</div>
+				<Pagination
+					setPage={setPage}
+					currentPage={page}
+					pageCount={Math.ceil(data?.totalResults! / 8)}
+				/>
+			</main>
+		</>
 	);
-
-	const { data, isLoading, isError, error } = useFetch(apiUrl);
-
-	if (isLoading) return <div>Loading...</div>;
-
-	if (isError)
-		navigate('/error', {
-			state: { error },
-		});
-	// console.log(data);
-	return <div>Home</div>;
 }

@@ -1,11 +1,14 @@
 import { ReactNode, createContext, useState, useEffect } from 'react';
-import { IUser } from './types/user';
+import { IUser, ROLES } from './types/user';
 
 const initialContext = {
 	id: Date.now(),
+	role: ROLES.CLIENT,
 };
-
-export const AuthContext = createContext({});
+export const AuthContext = createContext<{
+	user?: IUser;
+	handleUser?: (payload: IUser) => void;
+}>({});
 
 export function UserContext({ children }: { children: ReactNode }) {
 	const [user, setUser] = useState<IUser | null>(null);
@@ -24,7 +27,7 @@ export function UserContext({ children }: { children: ReactNode }) {
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{ user, handleUser }}>
+		<AuthContext.Provider value={{ user: user as IUser, handleUser }}>
 			{children}
 		</AuthContext.Provider>
 	);
